@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>タイマーを使ったプログラミング</title>
+  </head>
+  
+    <h2>作成目的</h2><p>ジャグラーの練習がしたかったので作りました。</p><h2>操作方法</h2><p>左下のレバーのマークのボタンを押すとスタートし、赤いボタンを押すと止まります。
+    <br>黒い点線が中心の目印です。<br>中心で止まれば”ナイス”とアラートされます<br>3レーン中心揃いなら"3倍レート!!"とアラートされ、ページが切り替わります。<br>難しいのでアラートはめったに出ません。</p>
+  
+    <p></p>
+    <button type="button" onclick="init4();"><img src="现实金属杠杆-葡萄酒开关-91498902.jpg" alt="レバー" width="100" height="100"></button>
+    <button type="button" onclick="stopBowl1();"><img src="0.jpg" alt="ボタン" width="100" height="100"></button>
+    <button type="button" onclick="stopBowl2();"><img src="0.jpg" alt="ボタン" width="100" height="100"></button>
+    <button type="button" onclick="stopBowl3();"><img src="0.jpg" alt="ボタン" width="100" height="100"></button>
+    <canvas id="canvas1" width="290" height="750"></canvas>
+    <canvas id="canvas2" width="290" height="750"></canvas>
+    <canvas id="canvas3" width="290" height="750"></canvas>
+    <script>
+
+
+    //ボールの初期設定（速度と座標）
+    let speedY1 = 2; //ボールの速度（y軸）
+    let locX1 = 150; //ボールの現在位置（x座標）
+    let radius1 = 100; //ボールの半径
+    let locY1 = 300;//ボールの現在位置（y座標）
+    let locY10 = 450;//四角形のy座標
+
+    let speedY2 = 2; //ボールの速度（y軸）
+    let locX2 = 150; //ボールの現在位置（x座標）
+    let radius2 = 100; //ボールの半径
+    let locY2 = 100;//ボールの現在位置（y座標）
+    let locY20 = 250;//四角形のy座標
+
+    let speedY3 = 2; //ボールの速度（y軸）
+    let locX3 = 150; //ボールの現在位置（x座標）
+    let radius3 = 100; //ボールの半径
+    let locY3 = 200;//ボールの現在位置（y座標）
+    let locY30 = 350;//四角形のy座標
+
+    function len(){
+      window.location.href = "最高.html";
+      //関数tanの中のif条件に当てはまれば、関数lenが実行され、"最高.html"にページが移る
+    }
+    
+    //canvasの準備
+    let canvas1 = document.getElementById('canvas1');
+    let ctx1 = canvas1.getContext('2d');
+    //変数timerID1
+    let timerID1;
+
+
+    function init1(){
+      clearInterval(timerID1);
+        timerID1 =setInterval(moveBowl1, 1);
+        //関数moveBowl1を1ms間隔で実行するタイマー処理
+    }
+    //locX1, locY1, locX10, locY10,の座標にそれぞれ円,正方形を描画する関数
+    function moveBowl1(){
+      //canvasの背景を黒にしとく
+      ctx1.fillStyle = 'black';
+      ctx1.fillRect(0, 200, canvas1.width, 300);
+      /*canvasの大きさとcanvas背景で塗りつぶす大きさを変えているのは図形がジャグラーのように回っているように見せるため。
+        canvas全体の大きさは290*750であり直径200の図形が2つ。fillRectで大きさを300(それぞれの図形どうしの間隔を50にして
+        図形一つがcanvasの中心に収まるように配置できる大きさ)にして、canvas上辺から200下げる(塗りつぶさない上部に
+        図形一つがちょうど収まる大きさ)。そして図形とcanvasの塗りつぶさない部分の色を同じにすることであたかも図形が回り続けているように見える。
+        図形が作成される場所と消滅する場所を背景と同色にすることで見えなくさせ、循環しているように見せている。
+      */
+
+      //現在位置の更新
+      locY10 = locY10 + speedY1;//正方形の現在地
+      locY1 = locY1 + speedY1;//円の現在地
+
+      //白で塗りつぶされた正方形を描画
+      ctx1.beginPath();
+      ctx1.fillStyle = 'white';
+      ctx1.fillRect(50,locY10,200,200);
+      ctx1.fill(); 
+
+       //白で塗りつぶされた円を描画
+      ctx1.beginPath();
+      ctx1.fillStyle = 'white';
+      ctx1.arc(locX1, locY1, radius1, 0, Math.PI * 2, true);
+      ctx1.fill();
+
+      //点線を描画
+      for(x1=0;x1<1000;x1=x1+1){
+        if(x1%2==0){
+          //起点及び終点で偶数の部分だけ描画する
+          ctx1.beginPath();
+          // 起点
+          ctx1.moveTo(x1, 350);
+          // 終点
+          ctx1.lineTo(x1+1, 350);
+          // 描画
+          ctx1.stroke();
+        }
+      }
+
+      if(locY10==500){ //円のY座標が500になったら
+        //円のY座標に0を代入する
+        //図形が視覚で確認できるcanvas上から見えなくなったら上部に新しく作成する
+        locY10=0;
+      }
+
+      if(locY1==600){//正方形のY座標が600になったら
+        //正方形のY座標に100を代入する
+       //図形が視覚で確認できるcanvas上から見えなくなったら上部に新しく作成する
+      locY1=100;
+      }
+
+
+  }
+
+  function stopBowl1(){ 
+        clearInterval(timerID1);
+        //clearIntervalで動きを止める
+        if(locY1==350||locY10==250){
+          //もし円か正方形を中心で止められたらナイスとアラートする
+        alert("ナイス");
+        }
+        tan();//関数tanを実行
+    }
+
+
+      //canvasの準備
+      let canvas2 = document.getElementById('canvas2');
+    let ctx2 = canvas2.getContext('2d');
+    //変数timerID2
+    let timerID2;
+
+    function init2(){
+      clearInterval(timerID2);
+        timerID2 =setInterval(moveBowl2, 10);
+        //関数moveBowl2を1ms間隔で実行するタイマー処理
+    }
+
+//locX2, locY2, locX20, locY20,の座標にそれぞれ円,正方形を描画する関数
+    function moveBowl2(){
+          //canvasの背景を黒にしとく
+      ctx2.fillStyle = 'black';
+      ctx2.fillRect(0, 200, canvas2.width, 300);
+
+      //現在位置の更新
+      locY20 = locY20 + speedY2;//正方形の現在地
+      locY2 = locY2 + speedY2;//円の現在地
+
+      //白で塗りつぶされた正方形を描画
+      ctx2.beginPath();
+      ctx2.fillStyle = 'white';
+      ctx2.fillRect(50,locY20,200,200);
+      ctx2.fill(); 
+
+       //白で塗りつぶされた円を描画
+      ctx2.beginPath();
+      ctx2.fillStyle = 'white';
+      ctx2.arc(locX2, locY2, radius2, 0, Math.PI * 2, true);
+      ctx2.fill(); 
+
+      //点線を描画
+      for(x2=0;x2<1000;x2=x2+1){
+        if(x2%2==0){
+          //起点及び終点で偶数の部分だけ描画する
+          ctx2.beginPath();
+          // 起点
+          ctx2.moveTo(x2, 350);
+          // 終点
+          ctx2.lineTo(x2+1, 350);
+          // 描画
+          ctx2.stroke();
+        }
+      }
+
+      if(locY20==500){ //円のY座標が500になったら
+        //円のY座標に0を代入する
+        locY20=0;
+
+      }
+      if(locY2==600){//正方形のY座標が600になったら
+        //正方形のY座標に100を代入する
+      locY2=100;
+
+      }
+
+      
+  }
+
+  function stopBowl2(){ 
+        clearInterval(timerID2);
+        //clearIntervalで動きを止める
+        
+      if(locY2==350||locY20==250){
+         //もし円か正方形を中心で止められたらナイスとアラートする
+        alert("ナイス");
+      }
+      tan();//関数tanを実行
+  
+    }
+
+      //canvasの準備
+      let canvas3 = document.getElementById('canvas3');
+    let ctx3 = canvas3.getContext('2d');
+    //変数timerID3
+    let timerID3;
+
+    function init3(){
+      clearInterval(timerID3);
+        timerID3 =setInterval(moveBowl3, 4);
+        //関数moveBowl3を1ms間隔で実行するタイマー処理
+    }
+        //locX1, locY1, locX10, locY10,の座標にそれぞれ円,正方形を描画する関数
+
+    function moveBowl3(){
+      //canvasの背景を黒にしとく
+      ctx3.fillStyle = 'black';
+      ctx3.fillRect(0, 200, canvas3.width, 300);
+
+      //現在位置の更新
+      locY30 = locY30 + speedY3;//正方形の現在地
+      locY3 = locY3 + speedY3;//円の現在地
+
+      //白で塗りつぶされた正方形を描画
+      ctx3.beginPath();
+      ctx3.fillStyle = 'white';
+      ctx3.fillRect(50,locY30,200,200);
+      ctx3.fill(); //これがないと描画されない
+
+      //白で塗りつぶされた円を描画
+      ctx3.beginPath();
+      ctx3.fillStyle = 'white';
+      ctx3.arc(locX3, locY3, radius3, 0, Math.PI * 2, true);
+      ctx3.fill(); //これがないと描画されない} 
+
+      //点を描画
+      for(x3=0;x3<1000;x3=x3+1){
+        if(x3%2==0){
+        //起点及び終点で偶数の部分だけ描画する
+          ctx3.beginPath();
+          // 起点
+          ctx3.moveTo(x3, 350);
+          // 終点
+          ctx3.lineTo(x3+1, 350);
+          // 描画
+          ctx3.stroke();
+        }
+      }
+
+      if(locY30==500){//正方形のY座標が600になったら
+        //正方形のY座標に100を代入する
+        locY30=0;
+
+      }
+      if(locY3==600){//円のY座標が500になったら
+        //円のY座標に0を代入する
+      locY3=100;
+
+      }
+
+  }
+
+  function stopBowl3(){ 
+        clearInterval(timerID3);
+        //clearIntervalで動きを止める
+        if(locY3==350||locY30==250){
+          //もし円か正方形を中心で止められたらナイスとアラートする
+        alert("ナイス");
+      }
+      tan();//関数tanを実行
+    }
+
+  function init4(){
+    //スタートボタンを一つにしたいから関数init1から3をまとめて4で呼び出す
+    init1();
+    init2();
+    init3();
+
+}
+function tan(){
+  if(locY1==350&&locY2==350&&locY3==350){
+    //3レーン全て中心に来たら
+        len();//関数lenを呼び出す
+      }
+  if(locY10==200&&locY20==200&&locY30==200){
+     //3レーン全て中心に来たら
+        len();//関数lenを呼び出す
+      }
+
+}
+
+    </script>
+  </body>
+</html>
